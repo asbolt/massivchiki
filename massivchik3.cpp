@@ -12,7 +12,7 @@ struct Matrix2
 int createMatrixes (int **matrix, Matrix2 **matrix2, int *sizeMatrix, int *rows);
 int scanAmountSumbols (Matrix2 *matrix2, int rows, int sizeMatrix);
 int scanSymbols (int rows, Matrix2 *matrix2, int *matrix);
-int printMatrix (int rows, Matrix2 *matrix2, int *matrix);
+int printMatrix (int rows, Matrix2 *matrix2);
 
 int main ()
 {
@@ -27,7 +27,7 @@ int main ()
 
     scanSymbols (rows, matrix2, matrix);
 
-    printMatrix (rows, matrix2, matrix);
+    printMatrix (rows, matrix2);
 
     return 0;
 }
@@ -103,17 +103,17 @@ int scanSymbols (int rows, Matrix2 *matrix2, int *matrix)
     return 0;
 }
 
-int printMatrix (int rows, Matrix2 *matrix2, int *matrix)
+int printMatrix (int rows, Matrix2 *matrix2)
 {
     printf ("Результат:\n");
-    
+
     int symbol = 0;
     for (int rowIndex = 0; rowIndex < rows; rowIndex++)
     {
 
         for (int symbols = 0; symbols < matrix2[rowIndex].amountSumbols; symbols++)
         { 
-            printf ("%d", matrix[symbol]);
+            printf ("%d", *(matrix2[rowIndex].adress + symbols));
 
             symbol++;
         }
