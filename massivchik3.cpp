@@ -10,7 +10,7 @@ struct Matrix2
 };
 
 int createMatrixes (int **matrix, Matrix2 **matrix2, int *sizeMatrix, int *rows);
-int scanAmountSumbols (Matrix2 *matrix2, int rows, int sizeMatrix);
+int scanAmountSumbols (Matrix2 *matrix2, int *matrix, int rows, int sizeMatrix);
 int scanSymbols (int rows, Matrix2 *matrix2, int *matrix);
 int printMatrix (int rows, Matrix2 *matrix2);
 
@@ -23,7 +23,7 @@ int main ()
 
     createMatrixes (&matrix, &matrix2, &sizeMatrix, &rows);
 
-    scanAmountSumbols (matrix2, rows, sizeMatrix);
+    scanAmountSumbols (matrix2, matrix, rows, sizeMatrix);
 
     scanSymbols (rows, matrix2, matrix);
 
@@ -47,7 +47,7 @@ int createMatrixes (int **matrix, Matrix2 **matrix2, int *sizeMatrix, int *rows)
     return 0;
 }
 
-int scanAmountSumbols (Matrix2 *matrix2, int rows, int sizeMatrix)
+int scanAmountSumbols (Matrix2 *matrix2, int *matrix, int rows, int sizeMatrix)
 {
     int symbolsAmount = 0;
     
@@ -78,7 +78,7 @@ int scanAmountSumbols (Matrix2 *matrix2, int rows, int sizeMatrix)
             matrix2[rowIndex+1].amountSumbols = sizeMatrix - symbolsAmount;
         }
 
-        matrix2[rowIndex+1].adress = matrix2[rowIndex].adress + symbols;
+        matrix2[rowIndex+1].adress = &matrix[rowIndex] + symbols;
     }
 
     return 0;
@@ -113,7 +113,7 @@ int printMatrix (int rows, Matrix2 *matrix2)
 
         for (int symbols = 0; symbols < matrix2[rowIndex].amountSumbols; symbols++)
         { 
-            printf ("%d", *(matrix2[rowIndex].adress + symbols));
+            printf ("%d ", *(matrix2[rowIndex].adress + symbols));
 
             symbol++;
         }
