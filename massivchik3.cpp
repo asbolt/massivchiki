@@ -3,55 +3,55 @@
 #include <assert.h>
 #include <stdlib.h>
 
-struct Matrix2 
+struct Matrix
 {
-    int *adress;
-    int amountSumbols;
+    int *matrix = NULL;
+    int sizeMatrix = 0;
+    int rows = 0;
+    int *adress = NULL;
+    int amountSumbols[];
 };
 
-int createMatrixes (int **matrix, Matrix2 **matrix2, int *sizeMatrix, int *rows);
-int scanAmountSumbols (Matrix2 *matrix2, int *matrix, int rows, int sizeMatrix);
-int scanSymbols (int rows, Matrix2 *matrix2, int *matrix);
-int printMatrix (int rows, Matrix2 *matrix2);
+int createMatrixes (Matrix *matrix);
+int scanAmountSumbols (Matrix *matrix);
+int scanSymbols (Matrix *matrix);
+int printMatrix (Matrix *matrix);
 
 int main ()
 {
-    int *matrix = NULL;
-    Matrix2 *matrix2 = NULL;
-    int sizeMatrix = 0;
-    int rows = 0;
+    Matrix *matrix = NULL;
 
-    createMatrixes (&matrix, &matrix2, &sizeMatrix, &rows);
+    createMatrixes (matrix);
 
-    scanAmountSumbols (matrix2, matrix, rows, sizeMatrix);
+    scanAmountSumbols (matrix);
 
-    scanSymbols (rows, matrix2, matrix);
+    scanSymbols (matrix);
 
-    printMatrix (rows, matrix2);
+    printMatrix (matrix);
 
     return 0;
 }
 
-int createMatrixes (int **matrix, Matrix2 **matrix2, int *sizeMatrix, int *rows)
+int createMatrixes (Matrix *matrix)
 {
     printf ("Сколько символов тебе нужно?\n");
-    scanf ("%d", sizeMatrix);
+    scanf ("%d", &(*matrix).sizeMatrix);
 
-    *matrix = (int *)calloc (*sizeMatrix, sizeof(int));
+    (*matrix).matrix = (int *)calloc ((*matrix).sizeMatrix, sizeof(int));
 
     printf ("Сколько рядов будет в массиве?\n");
-    scanf ("%d", rows);
+    scanf ("%d", &(*matrix).rows);
 
-    *matrix2 = (Matrix2 *)calloc (*rows, sizeof(Matrix2));
+    (*matrix).adress = (int *)calloc ((*matrix).rows, sizeof(Matrix));
 
     return 0;
 }
 
-int scanAmountSumbols (Matrix2 *matrix2, int *matrix, int rows, int sizeMatrix)
+int scanAmountSumbols (Matrix *matrix)
 {
     int symbolsAmount = 0;
     
-    for (int rowIndex = 0; rowIndex < rows-1; rowIndex++)
+    for (int rowIndex = 0; rowIndex < (*matrix).rows - 1; rowIndex++)
     {
         int symbols = 0;
 
@@ -60,41 +60,41 @@ int scanAmountSumbols (Matrix2 *matrix2, int *matrix, int rows, int sizeMatrix)
 
         symbolsAmount += symbols;
 
-        if (symbolsAmount > sizeMatrix)
+        if (symbolsAmount > (*matrix).sizeMatrix)
         {
             printf ("Чето дохера, пересчитай\n");
             return 1;
         }
-        else if (symbolsAmount == sizeMatrix && rowIndex != rows - 2)
+        else if (symbolsAmount == (*matrix).sizeMatrix && rowIndex != (*matrix).rows - 2)
         {
             printf ("А нахер тебе остальные ряды?\n");
             return 1;
         }
 
-        matrix2[rowIndex].amountSumbols = symbols;
+        (*matrix).amountSumbols[rowIndex] = symbols;
 
-        if (rowIndex == rows - 2)
+        if (rowIndex == (*matrix).rows - 2)
         {
-            matrix2[rowIndex+1].amountSumbols = sizeMatrix - symbolsAmount;
+            (*matrix).amountSumbols[rowIndex+1] = (*matrix).sizeMatrix - symbolsAmount;
         }
 
-        matrix2[rowIndex+1].adress = &matrix[rowIndex] + symbols;
+        (*matrix).amountSumbols[rowIndex + 1] = (*matrix).matrix[rowIndex] + symbols;
     }
 
     return 0;
 }
 
-int scanSymbols (int rows, Matrix2 *matrix2, int *matrix)
+int scanSymbols (Matrix *matrix)
 {
     int amountSumbols = 0;
 
-    for (int rowIndex = 0; rowIndex < rows; rowIndex++)
+    for (int rowIndex = 0; rowIndex < (*matrix).rows; rowIndex++)
     {
         printf ("Введите элементы ряда %d:\n", rowIndex);
 
-        for (int symbols = 0; symbols < matrix2[rowIndex].amountSumbols; symbols++)
+        for (int symbols = 0; symbols < (*matrix).amountSumbols[rowIndex]; symbols++)
         {
-            scanf ("%d", &matrix[amountSumbols]);
+            scanf ("%d", &(*matrix).matrix[amountSumbols]);
 
             amountSumbols++;
         }
@@ -103,17 +103,17 @@ int scanSymbols (int rows, Matrix2 *matrix2, int *matrix)
     return 0;
 }
 
-int printMatrix (int rows, Matrix2 *matrix2)
+int printMatrix (Matrix *matrix)
 {
     printf ("Результат:\n");
 
     int symbol = 0;
-    for (int rowIndex = 0; rowIndex < rows; rowIndex++)
+    for (int rowIndex = 0; rowIndex < (*matrix).rows; rowIndex++)
     {
 
-        for (int symbols = 0; symbols < matrix2[rowIndex].amountSumbols; symbols++)
+        for (int symbols = 0; symbols < (*matrix).amountSumbols[rowIndex]; symbols++)
         { 
-            printf ("%d ", *(matrix2[rowIndex].adress + symbols));
+            printf ("%d ", *(matrix[rowIndex].adress + symbols));
 
             symbol++;
         }
